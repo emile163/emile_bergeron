@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Émile Bergeron — CPI en génie mécanique</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bleu-fonce:  #1A4A8C;
+      --bleu-moyen:  #2560B0;
+      --bleu-clair:  #E8F0FB;
+      --vert-fonce:  #2A7A4B;
+      --vert-moyen:  #3A9960;
+      --blanc:       #FFFFFF;
+      --gris-texte:  #2D2D2D;
+      --gris-doux:   #F5F7FA;
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'DM Sans', sans-serif; background: var(--gris-doux); color: var(--gris-texte); min-height: 100vh; }
+
+    /* NAV */
+    nav {
+      background: var(--bleu-fonce);
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 2.5rem; height: 58px;
+      position: sticky; top: 0; z-index: 100;
+      box-shadow: 0 2px 16px rgba(26,74,140,.25);
+    }
+    nav .logo { font-family: 'DM Serif Display', serif; font-size: 1.15rem; color: #fff; letter-spacing: .02em; }
+    nav .nav-links { display: flex; gap: 1.8rem; list-style: none; }
+    nav .nav-links a { color: rgba(255,255,255,.78); text-decoration: none; font-size: .88rem; font-weight: 500; letter-spacing: .03em; transition: color .2s; }
+    nav .nav-links a:hover { color: #fff; }
+    .btn-pdf { background: var(--vert-fonce); color: #fff !important; padding: .42rem 1.1rem; border-radius: 6px; font-weight: 600 !important; transition: background .2s, transform .15s !important; }
+    .btn-pdf:hover { background: var(--vert-moyen) !important; transform: translateY(-1px); }
+
+    /* HERO */
+    .hero { background: var(--bleu-fonce); color: #fff; padding: 4.5rem 2.5rem 3.5rem; position: relative; overflow: hidden; }
+    .hero::before { content: ''; position: absolute; top: -80px; right: -80px; width: 420px; height: 420px; border-radius: 50%; background: rgba(37,96,176,.28); pointer-events: none; }
+    .hero::after  { content: ''; position: absolute; bottom: -100px; left: 30%; width: 320px; height: 320px; border-radius: 50%; background: rgba(42,122,75,.15); pointer-events: none; }
+    .hero-inner { max-width: 860px; margin: 0 auto; position: relative; z-index: 1; opacity: 0; animation: fadeUp .7s .1s forwards; }
+    .hero-name { font-family: 'DM Serif Display', serif; font-size: clamp(2.4rem, 5vw, 3.6rem); line-height: 1.1; letter-spacing: -.01em; }
+    .hero-title { font-size: 1.05rem; font-weight: 400; color: #C8D8F0; margin-top: .5rem; letter-spacing: .04em; }
+    .hero-tagline { margin-top: 1.4rem; font-style: italic; font-size: 1rem; color: #D8F0E4; max-width: 620px; line-height: 1.65; border-left: 3px solid var(--vert-moyen); padding-left: 1rem; }
+    .hero-contacts { display: flex; flex-wrap: wrap; gap: .7rem 1.6rem; margin-top: 1.8rem; }
+    .hero-contacts a { color: rgba(255,255,255,.75); text-decoration: none; font-size: .87rem; display: flex; align-items: center; gap: .4rem; transition: color .2s; }
+    .hero-contacts a:hover { color: #fff; }
+
+    /* LAYOUT */
+    .page-wrapper { max-width: 1020px; margin: 0 auto; padding: 2.5rem 1.5rem 4rem; display: grid; grid-template-columns: 260px 1fr; gap: 2rem; align-items: start; }
+
+    /* SIDEBAR */
+    .sidebar { background: var(--bleu-clair); border-radius: 12px; padding: 1.6rem 1.4rem; position: sticky; top: 74px; opacity: 0; animation: fadeUp .7s .25s forwards; }
+    .sidebar-section { margin-bottom: 1.6rem; }
+    .sidebar-section:last-child { margin-bottom: 0; }
+    .sidebar-label { font-size: .72rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--bleu-fonce); border-bottom: 2px solid var(--bleu-moyen); padding-bottom: .35rem; margin-bottom: .75rem; }
+    .sidebar ul { list-style: none; }
+    .sidebar ul li { font-size: .85rem; color: #3a3a3a; padding: .28rem 0; display: flex; align-items: baseline; gap: .45rem; }
+    .sidebar ul li::before { content: '–'; color: var(--bleu-moyen); font-weight: 700; flex-shrink: 0; }
+    .sidebar ul li.sub { padding-left: 1.1rem; font-size: .8rem; color: #555; }
+    .sidebar ul li.sub::before { content: ''; width: 0; }
+    .badge-oiq { background: var(--bleu-fonce); color: #fff; border-radius: 8px; padding: .6rem .9rem; margin-top: .3rem; }
+    .badge-oiq .badge-title { font-size: .8rem; font-weight: 700; letter-spacing: .04em; }
+    .badge-oiq .badge-sub   { font-size: .75rem; color: #C8D8F0; margin-top: .2rem; }
+
+    /* MAIN */
+    .main-content { opacity: 0; animation: fadeUp .7s .35s forwards; }
+    .section-title { font-size: .72rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--bleu-fonce); border-bottom: 2px solid var(--bleu-moyen); padding-bottom: .4rem; margin-bottom: 1.2rem; }
+    .cv-section { margin-bottom: 2.4rem; }
+
+    /* CARDS */
+    .entry { padding: 1.1rem 1.2rem; background: #fff; border-radius: 10px; margin-bottom: .9rem; border-left: 4px solid var(--bleu-moyen); transition: box-shadow .2s, transform .2s; }
+    .entry:hover { box-shadow: 0 4px 20px rgba(37,96,176,.12); transform: translateY(-2px); }
+    .entry.project { border-left-color: var(--vert-fonce); }
+    .entry.project:hover { box-shadow: 0 4px 20px rgba(42,122,75,.12); }
+    .entry-header { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: .3rem; }
+    .entry-title  { font-weight: 700; font-size: .97rem; color: #111; }
+    .entry-org    { font-weight: 400; color: #444; }
+    .entry-dates  { font-size: .8rem; color: #888; font-style: italic; white-space: nowrap; }
+    .entry-sub-label { font-size: .78rem; font-weight: 600; color: var(--vert-fonce); margin-top: .3rem; }
+    .entry-bullets { list-style: none; margin-top: .65rem; }
+    .entry-bullets li { font-size: .875rem; line-height: 1.6; color: #3a3a3a; padding: .18rem 0 .18rem .9rem; position: relative; }
+    .entry-bullets li::before { content: '–'; position: absolute; left: 0; color: var(--bleu-moyen); font-weight: 700; }
+    .entry.project .entry-bullets li::before { color: var(--vert-fonce); }
+
+    /* ANIMATIONS */
+    @keyframes fadeUp { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* FOOTER */
+    footer { background: var(--bleu-fonce); color: rgba(255,255,255,.55); text-align: center; padding: 1.2rem; font-size: .8rem; }
+    footer a { color: rgba(255,255,255,.75); text-decoration: none; }
+    footer a:hover { color: #fff; }
+
+    /* RESPONSIVE */
+    @media (max-width: 720px) {
+      .page-wrapper { grid-template-columns: 1fr; }
+      .sidebar { position: static; }
+      nav .nav-links { gap: 1rem; }
+      nav { padding: 0 1.2rem; }
+      .hero { padding: 3rem 1.4rem 2.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<nav>
+  <span class="logo">Émile Bergeron</span>
+  <ul class="nav-links">
+    <li><a href="#experience">Expérience</a></li>
+    <li><a href="#projets">Projets</a></li>
+    <li><a href="#competences">Compétences</a></li>
+    <li><a href="CV_Emile_Bergeron.pdf" target="_blank" class="btn-pdf">⬇ Télécharger CV</a></li>
+  </ul>
+</nav>
+
+<header class="hero">
+  <div class="hero-inner">
+    <h1 class="hero-name">Émile Bergeron</h1>
+    <p class="hero-title">CPI en génie mécanique &nbsp;·&nbsp; Polyvalent &amp; Créatif</p>
+    <p class="hero-tagline">
+      Créateur dans l'âme, débrouillard et résilient par expérience : là où d'autres voient un problème,
+      je vois un système à comprendre, améliorer et faire fonctionner.
+    </p>
+    <div class="hero-contacts">
+      <a href="tel:4383958482">📞 (438) 395-8482</a>
+      <a href="mailto:bergeronemile4@gmail.com">✉ bergeronemile4&#64;gmail.com</a>
+      <a href="https://www.linkedin.com/in/emile-bergeron-cpi/" target="_blank">🔗 LinkedIn</a>
+      <a>📍 Montréal, Québec</a>
+    </div>
+  </div>
+</header>
+
+<div class="page-wrapper">
+
+  <aside class="sidebar" id="competences">
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">Logiciels CAO</p>
+      <ul>
+        <li>Catia 3DS</li>
+        <li class="sub">Part Design, Assembly</li>
+        <li class="sub">Sheet Metal, Electric</li>
+        <li>Fusion 360</li>
+        <li>Java &amp; Python</li>
+        <li>Outils d'intelligence artificielle</li>
+        <li>MS Office</li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">Compétences pratiques</p>
+      <ul>
+        <li>Impression 3D / modélisation</li>
+        <li>Soudure MIG</li>
+        <li>Électronique</li>
+        <li>Mécanique générale</li>
+        <li class="sub">Petits moteurs, autos, diesel</li>
+        <li>Électricité marine 12V</li>
+        <li>Fibre de verre</li>
+        <li>Menuiserie</li>
+        <li>Fabrication de drones</li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">Langues</p>
+      <ul>
+        <li>Français — natif</li>
+        <li>Anglais — courant</li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">Formation</p>
+      <ul>
+        <li style="flex-direction:column; align-items:flex-start; gap:.1rem;">
+          <strong style="font-size:.88rem;">Bac. Génie mécanique</strong>
+          <span style="font-size:.78rem; color:#555; font-style:italic;">Développement durable</span>
+          <span style="font-size:.82rem;">Polytechnique Montréal</span>
+          <span style="font-size:.78rem; color:#888;">2020 – 2024</span>
+        </li>
+        <li style="flex-direction:column; align-items:flex-start; gap:.1rem; margin-top:.6rem;">
+          <span style="font-size:.82rem;">DEC — Sciences, informatique et math.</span>
+          <span style="font-size:.82rem;">Cégep Bois-de-Boulogne</span>
+          <span style="font-size:.78rem; color:#888;">2018 – 2020</span>
+        </li>
+        <li style="flex-direction:column; align-items:flex-start; gap:.1rem; margin-top:.6rem;">
+          <span style="font-size:.82rem;">Formation Catia 3DS</span>
+          <span style="font-size:.78rem; color:#555;">Part Design, Electric, Sheet Metal, Assembly</span>
+          <span style="font-size:.78rem; color:#888;">Lion Électrique · 2023</span>
+        </li>
+      </ul>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="sidebar-label">Ordre professionnel</p>
+      <div class="badge-oiq">
+        <div class="badge-title">Membre OIQ — CPI</div>
+        <div class="badge-sub">No. 6091621</div>
+      </div>
+    </div>
+
+  </aside>
+
+  <main class="main-content">
+
+    <section class="cv-section" id="experience">
+      <h2 class="section-title">Expérience de travail</h2>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Concepteur junior — Équipe habillage autobus <span class="entry-org">— Lion Électrique</span></span>
+          <span class="entry-dates">2022 – 2023 (temps partiel)</span>
+        </div>
+        <ul class="entry-bullets">
+          <li>Production de dessins de détails, d'assemblage et d'installation signés par un ingénieur</li>
+          <li>Amélioration de designs d'assemblages présentant des problématiques en production</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Stage PLM/CAO <span class="entry-org">— Lion Électrique</span></span>
+          <span class="entry-dates">Été 2022</span>
+        </div>
+        <ul class="entry-bullets">
+          <li>Création d'un catalogue de pièces standards pour les équipes d'ingénierie</li>
+          <li>Création et gestion de BOM (nomenclatures) pour des assemblages mécaniques complexes</li>
+          <li>Collaboration avec les ingénieurs sur des assemblages de grande envergure</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Pompier volontaire <span class="entry-org">— Saint-Alphonse-Rodriguez</span></span>
+          <span class="entry-dates">2020 – 2022</span>
+        </div>
+        <ul class="entry-bullets">
+          <li>Gestion de situations critiques sous pression avec adaptation rapide aux imprévus</li>
+          <li>Travail d'équipe et communication efficace en contexte d'urgence</li>
+        </ul>
+      </div>
+
+      <div class="entry">
+        <div class="entry-header">
+          <span class="entry-title">Préposé à l'écocentre <span class="entry-org">— Saint-Alphonse-Rodriguez</span></span>
+          <span class="entry-dates">Étés 2018 – 2021</span>
+        </div>
+        <ul class="entry-bullets">
+          <li>Optimisation du système de triage des déchets et matières recyclables</li>
+          <li>Opération et entretien de machinerie lourde (pelles mécaniques)</li>
+          <li>Service à la clientèle bilingue, professionnel et courtois</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="cv-section" id="projets">
+      <h2 class="section-title">Projets</h2>
+
+      <div class="entry project">
+        <div class="entry-header">
+          <span class="entry-title">Capitaine de voilier — Kensuke (Hunter 37c, 1979)</span>
+          <span class="entry-dates">2024 – 2026</span>
+        </div>
+        <p class="entry-sub-label">⛵ Québec → Caraïbes &nbsp;·&nbsp; +12 000 km</p>
+        <ul class="entry-bullets">
+          <li>Reconstruction complète du bateau : moteur diesel (pistons, soupapes, injecteur, échangeur de chaleur), système électrique 12V, fibre de verre, menuiserie</li>
+          <li>Installation et intégration de systèmes : panneaux solaires, éolienne, désalinisateur, autopilote, radar, VHF, batterie lithium</li>
+          <li>Navigation hauturière autonome : traversées océaniques de plusieurs jours, météo, gestion des risques et quarts de nuit</li>
+          <li>Gestion de pannes critiques en mer et prise de décision sous pression avec ressources limitées</li>
+          <li>Démonstration concrète de résilience, débrouillardise et pensée systémique sur 21 mois</li>
+        </ul>
+      </div>
+
+      <div class="entry project">
+        <div class="entry-header">
+          <span class="entry-title">Système à pédale de distribution d'eau par air comprimé</span>
+          <span class="entry-dates">2023</span>
+        </div>
+        <p class="entry-sub-label">Projet intégrateur — solo</p>
+        <ul class="entry-bullets">
+          <li>Analyse du problème de distribution d'eau en chalet isolé, avec requis client précis</li>
+          <li>Modélisation 3D, plans techniques et calculs (dynamique des fluides, résistance des matériaux)</li>
+          <li>Fabrication d'un prototype fonctionnel (vélo, compresseur, extincteur à air comprimé) et présentation au jury</li>
+        </ul>
+      </div>
+    </section>
+
+    <div style="text-align:center; margin-top: 1rem;">
+      <a href="CV_Emile_Bergeron.pdf" target="_blank"
+         style="display:inline-flex; align-items:center; gap:.6rem; background:var(--vert-fonce); color:#fff;
+                padding:.85rem 2rem; border-radius:8px; text-decoration:none; font-weight:600; font-size:.95rem;
+                transition:background .2s, transform .15s; box-shadow:0 4px 14px rgba(42,122,75,.3);"
+         onmouseover="this.style.background='#3A9960';this.style.transform='translateY(-2px)'"
+         onmouseout="this.style.background='#2A7A4B';this.style.transform='translateY(0)'">
+        ⬇ &nbsp;Télécharger le CV complet (PDF)
+      </a>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <p>Émile Bergeron &nbsp;·&nbsp; CPI en génie mécanique &nbsp;·&nbsp;
+    <a href="mailto:bergeronemile4@gmail.com">bergeronemile4&#64;gmail.com</a>
+  </p>
+</footer>
+
+</body>
+</html>
